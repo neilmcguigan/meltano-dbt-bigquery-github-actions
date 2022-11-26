@@ -10,7 +10,9 @@ on:
     branches-ignore:
       - main
 
-concurrency: sanity
+concurrency: 
+  group: sanity
+  cancel-in-progress: true
 
 env:
   MELTANO_ENVIRONMENT: dev
