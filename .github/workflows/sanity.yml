@@ -10,6 +10,16 @@ on:
     branches-ignore:
       - main
 
+env:
+  MELTANO_ENVIRONMENT: dev
+  DEFAULT_SCHEMA: bronze
+  MELTANO_CLI_LOG_LEVEL: info
+  GCP_LOCATION: us-west1
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  TARGET_BIGQUERY_PROJECT_ID: $GCP_PROJECT_ID
+  TARGET_BIGQUERY_LOCATION: $GCP_LOCATION
+  TARGET_BIGQUERY_DATASET_ID: $GCP_LOCATION
+
 jobs:
   meltano:
     runs-on: ubuntu-latest
@@ -18,10 +28,13 @@ jobs:
 
       - name: Checkout source code
         uses: actions/checkout@v3
+
+      - name: Create client_secrets.json from GHA secret
+        run: echo "${{ secrets.GCP_KEY }}" > client_secrets.json
         
       - name: Install Meltano and run
         run: |
           pipx install meltano[gcs]
           meltano install
           meltano config tap-csv test
-          meltano run tap-csv target-jsonl
+          meltano run tap-csv target-bigquery
