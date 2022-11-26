@@ -15,8 +15,6 @@ env:
   DEFAULT_SCHEMA: bronze
   MELTANO_CLI_LOG_LEVEL: info
   GCP_LOCATION: us-west1
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  TARGET_BIGQUERY_PROJECT_ID: $GCP_PROJECT_ID
   TARGET_BIGQUERY_LOCATION: $GCP_LOCATION
   TARGET_BIGQUERY_DATASET_ID: $GCP_LOCATION
 
@@ -24,19 +22,27 @@ jobs:
   meltano:
     runs-on: ubuntu-latest
     name: meltano
+    environment: dev
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      TARGET_BIGQUERY_PROJECT_ID: $GCP_PROJECT_ID
+    
     steps:
 
       - name: Checkout source code
         uses: actions/checkout@v3
 
       - name: Create client_secrets.json from GHA secret
-        run: echo "$GCP_KEY" > client_secrets.json
+        run: |
+          echo "$GCP_KEY" > client_secrets.json
+          echo "$GCP_PROJECT_ID"
+          ls -la
         env:
           GCP_KEY: ${{ secrets.GCP_KEY }}
         
-      - name: Install Meltano and run
-        run: |
-          pipx install meltano[gcs]
-          meltano install
-          meltano config tap-csv test
-          meltano run tap-csv target-bigquery
+      # - name: Install Meltano and run
+      #   run: |
+      #     pipx install meltano[gcs]
+      #     meltano install
+      #     meltano config tap-csv test
+      #     meltano run tap-csv target-bigquery
