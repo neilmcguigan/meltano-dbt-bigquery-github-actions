@@ -1,8 +1,0 @@
-on: push
-
-jobs:
-  job1:
-    runs-on: ubuntu-latest
-    name: job1
-    steps:
-      - run: echo hi

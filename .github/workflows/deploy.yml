@@ -1,0 +1,43 @@
+on:
+  schedule:
+    - cron: "0 0 * * *" # UTC
+  workflow_dispatch:
+
+concurrency: prod
+
+env:
+  MELTANO_ENVIRONMENT: prod
+  MELTANO_CLI_LOG_LEVEL: info
+  TARGET_BIGQUERY_LOCATION: us-west1
+  TARGET_BIGQUERY_DATASET_ID: bronze
+  MELTANO_STATE_BACKEND_URI: gs://elt-demo-prod-state/meltano-state
+  GOOGLE_APPLICATION_CREDENTIALS: ./client_secrets.json
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+      url: https://console.cloud.google.com/bigquery
+    env:
+      TARGET_BIGQUERY_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - run: |
+          yamllint --no-warnings .
+
+      - name: Create client_secrets.json from GHA secret
+        run: |
+          echo "$GCP_KEY" > client_secrets.json
+        env:
+          GCP_KEY: ${{ secrets.GCP_KEY }}
+
+      - name: Install Meltano and run
+        run: |
+          pipx install meltano[gcs]
+          meltano install
+          meltano config tap-csv test
+          meltano run tap-csv target-bigquery

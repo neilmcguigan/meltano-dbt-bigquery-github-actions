@@ -1,0 +1,50 @@
+# ----------------------------------------------------------------------
+# This is a Github Actions (GHA) workflow
+# Should be run on feature-branch push
+#
+# https://docs.github.com/en/actions/using-workflows/about-workflows
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: sanity
+  cancel-in-progress: true
+
+env:
+  MELTANO_ENVIRONMENT: dev
+  MELTANO_CLI_LOG_LEVEL: info
+  TARGET_BIGQUERY_LOCATION: us-west1
+  TARGET_BIGQUERY_DATASET_ID: bronze
+
+jobs:
+  meltano:
+    runs-on: ubuntu-latest
+    name: meltano
+    environment:
+      name: dev
+      url: https://console.cloud.google.com/bigquery
+    env:
+      TARGET_BIGQUERY_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - run: |
+          yamllint --no-warnings .
+
+      - name: Create client_secrets.json from GHA secret
+        run: |
+          echo "$GCP_KEY" > client_secrets.json
+        env:
+          GCP_KEY: ${{ secrets.GCP_KEY }}
+
+      - name: Install Meltano and run
+        run: |
+          pipx install meltano[gcs]
+          meltano install
+          meltano config tap-csv test
+          meltano run --dry-run tap-csv target-bigquery
