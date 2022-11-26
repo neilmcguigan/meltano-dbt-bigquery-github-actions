@@ -3,20 +3,23 @@ on:
     branches:
       - main
 
+env:
+  DEFAULT_SCHEMA: bronze
+  MELTANO_CLI_LOG_LEVEL: info
+  GCP_LOCATION: us-west1
+  TARGET_BIGQUERY_LOCATION: us-west1
+  TARGET_BIGQUERY_DATASET_ID: bronze
+
 jobs:
-
-  job1:
-    runs-on: ubuntu-latest
-    name: job1
-    steps:
-      - run: echo hi
-
 
   deploy-staging:
     runs-on: ubuntu-latest
     environment: 
       name: staging
       url: https://console.cloud.google.com/bigquery
+    env:
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      
     steps:
       - run: echo deploying to staging with ${{ secrets.SECRET }}
 
