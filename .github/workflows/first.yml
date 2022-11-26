@@ -1,8 +1,30 @@
 on: push
 
 jobs:
+
   job1:
     runs-on: ubuntu-latest
     name: job1
     steps:
       - run: echo hi
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: 
+      name: dev
+      url: https://console.cloud.google.com/bigquery?project=elt-demo-dev
+    steps:
+      - run: echo deploying to dev with ${{ secrets.SECRET }}
+
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - run: echo deploying to staging with ${{ secrets.SECRET }}
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - run: echo deploying to prod with ${{ secrets.SECRET }}
