@@ -35,14 +35,12 @@ jobs:
       - name: Create client_secrets.json from GHA secret
         run: |
           echo "$GCP_KEY" > client_secrets.json
-          echo "$GCP_PROJECT_ID"
-          ls -la
         env:
           GCP_KEY: ${{ secrets.GCP_KEY }}
         
-      # - name: Install Meltano and run
-      #   run: |
-      #     pipx install meltano[gcs]
-      #     meltano install
-      #     meltano config tap-csv test
-      #     meltano run tap-csv target-bigquery
+      - name: Install Meltano and run
+        run: |
+          pipx install meltano[gcs]
+          meltano install
+          meltano config tap-csv test
+          meltano run tap-csv target-bigquery
