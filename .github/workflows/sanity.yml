@@ -25,7 +25,7 @@ jobs:
     environment: dev
     env:
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      TARGET_BIGQUERY_PROJECT_ID: $GCP_PROJECT_ID
+      TARGET_BIGQUERY_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
     
     steps:
 

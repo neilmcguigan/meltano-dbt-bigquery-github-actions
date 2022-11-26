@@ -18,6 +18,7 @@ jobs:
       name: staging
       url: https://console.cloud.google.com/bigquery
     env:
+      MELTANO_ENVIRONMENT: staging
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       
     steps:
@@ -30,5 +31,8 @@ jobs:
     environment: 
       name: prod
       url: https://console.cloud.google.com/bigquery
+    env:
+      MELTANO_ENVIRONMENT: prod
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
     steps:
       - run: echo deploying to prod with ${{ secrets.SECRET }}
