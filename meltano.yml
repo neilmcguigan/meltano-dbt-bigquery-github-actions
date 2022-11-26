@@ -6,24 +6,24 @@
 version: 1
 default_environment: dev
 environments:
-- name: dev
-- name: staging
-- name: prod
+  - name: dev
+  - name: staging
+  - name: prod
 send_anonymous_usage_stats: false
 project_id: e5b1beb1-b4bf-4505-b7f3-9da65360bc10
 plugins:
   extractors:
-  - name: tap-csv
-    variant: meltanolabs
-    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
-    config:
-      files:
-      - entity: dummies
-        path: dummy.csv
-        keys: [id]
+    - name: tap-csv
+      variant: meltanolabs
+      pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+      config:
+        files:
+          - entity: dummies
+            path: dummy.csv
+            keys: [id]
   loaders:
-  - name: target-bigquery
-    variant: adswerve
-    pip_url: git+https://github.com/adswerve/target-bigquery.git@0.12.0
-    config:
-      add_metadata_columns: true
+    - name: target-bigquery
+      variant: adswerve
+      pip_url: git+https://github.com/adswerve/target-bigquery.git@0.12.0
+      config:
+        add_metadata_columns: true
