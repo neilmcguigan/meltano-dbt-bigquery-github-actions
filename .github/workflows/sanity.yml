@@ -24,3 +24,4 @@ jobs:
           pipx install meltano[gcs]
           meltano install
           meltano config tap-csv test
+          meltano run tap-csv target-jsonl

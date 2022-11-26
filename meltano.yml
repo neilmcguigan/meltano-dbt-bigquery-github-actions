@@ -18,6 +18,10 @@ plugins:
     pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
     config:
       files:
-        - entity: dummies
-          path: dummy.csv
-          keys: [id]
+      - entity: dummies
+        path: dummy.csv
+        keys: [id]
+  loaders:
+  - name: target-jsonl
+    variant: andyh1203
+    pip_url: target-jsonl
