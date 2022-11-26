@@ -1,0 +1,26 @@
+# ----------------------------------------------------------------------
+# This is a Github Actions (GHA) workflow 
+# Runs a Meltano pipeline 
+#
+# https://docs.github.com/en/actions/using-workflows/about-workflows
+# ----------------------------------------------------------------------
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  meltano:
+    runs-on: ubuntu-latest
+    name: meltano
+    steps:
+
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        
+      - name: Install Meltano and run
+        run: |
+          pipx install meltano[gcs]
+          meltano install
+          meltano config tap-csv test

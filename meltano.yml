@@ -1,0 +1,23 @@
+# ------------------------------------------------------------
+# The Meltano project configuration file
+# https://docs.meltano.com/reference/settings
+# ------------------------------------------------------------
+
+version: 1
+default_environment: dev
+environments:
+- name: dev
+- name: staging
+- name: prod
+send_anonymous_usage_stats: false
+project_id: e5b1beb1-b4bf-4505-b7f3-9da65360bc10
+plugins:
+  extractors:
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config:
+      files:
+        - entity: dummies
+          path: dummy.csv
+          keys: [id]
