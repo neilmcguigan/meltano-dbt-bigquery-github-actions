@@ -22,9 +22,6 @@ plugins:
         path: dummy.csv
         keys: [id]
   loaders:
-  - name: target-jsonl
-    variant: andyh1203
-    pip_url: target-jsonl
   - name: target-bigquery
     variant: adswerve
     pip_url: git+https://github.com/adswerve/target-bigquery.git@0.12.0

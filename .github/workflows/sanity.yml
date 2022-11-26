@@ -12,9 +12,7 @@ on:
 
 env:
   MELTANO_ENVIRONMENT: dev
-  DEFAULT_SCHEMA: bronze
   MELTANO_CLI_LOG_LEVEL: info
-  GCP_LOCATION: us-west1
   TARGET_BIGQUERY_LOCATION: us-west1
   TARGET_BIGQUERY_DATASET_ID: bronze
 
@@ -22,9 +20,10 @@ jobs:
   meltano:
     runs-on: ubuntu-latest
     name: meltano
-    environment: dev
+    environment: 
+      name: dev
+      url: https://console.cloud.google.com/bigquery
     env:
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       TARGET_BIGQUERY_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
     
     steps:
@@ -43,4 +42,4 @@ jobs:
           pipx install meltano[gcs]
           meltano install
           meltano config tap-csv test
-          meltano run tap-csv target-bigquery
+          meltano run --dry-run tap-csv target-bigquery
