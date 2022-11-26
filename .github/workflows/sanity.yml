@@ -10,6 +10,8 @@ on:
     branches-ignore:
       - main
 
+concurrency: sanity
+
 env:
   MELTANO_ENVIRONMENT: dev
   MELTANO_CLI_LOG_LEVEL: info
