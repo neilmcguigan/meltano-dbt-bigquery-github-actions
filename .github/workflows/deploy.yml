@@ -1,6 +1,6 @@
 on:
-  schedule:
-    - cron: "0 0 * * *" # UTC
+#  schedule:
+#    - cron: "0 0 * * *" # UTC
   workflow_dispatch:
 
 concurrency: prod
